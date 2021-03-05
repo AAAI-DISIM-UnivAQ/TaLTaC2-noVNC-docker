@@ -14,9 +14,6 @@ RUN  wget -O - https://dl.winehq.org/wine-builds/winehq.key | apt-key add -  && 
     echo 'deb https://dl.winehq.org/wine-builds/ubuntu/ focal main' | tee /etc/apt/sources.list.d/winehq.list && \
     apt-get update && \
     apt-get -y install --install-recommends wine-staging-i386:i386=$WINEVER~focal wine-staging-amd64:amd64=$WINEVER~focal wine-staging:amd64=$WINEVER~focal winehq-staging:amd64=$WINEVER~focal  && \
-    mkdir /opt/wine-staging/share/wine/mono && wget -O - https://dl.winehq.org/wine/wine-mono/4.9.4/wine-mono-bin-4.9.4.tar.gz | tar -xzv -C /opt/wine-staging/share/wine/mono && \
-    mkdir /opt/wine-staging/share/wine/gecko && wget -O /opt/wine-staging/share/wine/gecko/wine-gecko-2.47.1-x86.msi https://dl.winehq.org/wine/wine-gecko/2.47.1/wine-gecko-2.47.1-x86.msi && \
-    wget -O /opt/wine-staging/share/wine/gecko/wine-gecko-2.47.1-x86_64.msi https://dl.winehq.org/wine/wine-gecko/2.47.1/wine-gecko-2.47.1-x86_64.msi && \
     apt-get -y full-upgrade && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 ENV WINEPREFIX /root/prefix32
@@ -34,6 +31,9 @@ RUN wget -O - https://github.com/novnc/noVNC/archive/v1.1.0.tar.gz | tar -xzv -C
 
 EXPOSE 8080
 
+RUN mkdir .fluxbox && echo 'session.screen0.toolbar.visible:        false' > .fluxbox/init
+
 ADD run.sh /opt/run.sh
+ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN chmod +x /opt/run.sh
-CMD ["/opt/run.sh"]
+CMD ["/usr/bin/supervisord"]
