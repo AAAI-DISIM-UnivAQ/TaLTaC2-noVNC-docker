@@ -1,8 +1,8 @@
 build:
-	docker build -t TaLTaC2 .
+	docker build -t taltac2 .
 
 run: build
-	docker run --rm -p 18080:8080 TaLTaC2
+	docker run --rm -p 18080:8080 taltac2
 
 shell: build
-	docker run --rm -ti -p 18080:8080 TaLTaC2 bash
+	docker run --rm -ti -p 18080:8080 taltac2 bash
